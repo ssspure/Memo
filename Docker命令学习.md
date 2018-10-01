@@ -8,7 +8,7 @@ REPOSITORY          TAG                 IMAGE ID            CREATED             
 hello-world         latest              19b3f968b60c        3 weeks ago         1.84 kB
 ~~~
 
-#####1.a选项
+#####1.a选项 
 
 ~~~bash
 [root@dev ~]# docker images -a
