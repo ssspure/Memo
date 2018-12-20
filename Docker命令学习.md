@@ -28,6 +28,8 @@ hello-world         latest              19b3f968b60c        3 weeks ago         
 
 只显示镜像的ID
 
+docker image ls命令也可以用来显示镜像。
+
 #####3.--digests
 
 ~~~bash
@@ -81,7 +83,9 @@ davidcaste/alpine-tomcat   Apache Tomcat 7/8 using Oracle Java 7/8 wi...   30   
 [root@dev ~]# docker pull tomcat
 ~~~
 
-从DockerHub上下载指定的镜像。
+从DockerHub上下载指定的镜像。在使用docker pull命令获取镜像的时候，可以通过指定tag的方式获取镜像。
+
+docker pull imageName:tag
 
 #### 四.docker rmi
 
@@ -106,6 +110,8 @@ Deleted: 74bc6c628a008492ac5b8ebf00c36fd72512e653606efb4f5209501747a9efb4
 ~~~
 
 这和命令用于删除所有的镜像。
+
+还可以通过docker image rm imageName的方式删除指定的镜像。
 
 ####五.docker run
 
@@ -133,6 +139,21 @@ db3b8045ab34        c5507be714a7        "/bin/bash"         16 seconds ago      
 
 通过命令的执行结果可以发现，run命令开启的伪终端root@db3b8045ab34后面的hash值，其实就是新生成的容器的id，images的值是c5507be714a7，就是centos的images id。
 
+在启动类似于nginx容器的时候，这种容器并没有shell界面，所以可以让他在后台运行。
+
+通过-d选项可以让容器在后台运行。
+
+~~~bash
+[~ ssspure:] docker run --name web -d nginx
+2b723a9993b3f8420ca7a834260304f8e7c95ca67fe85f2d2e21e9d1fed9a4c7
+[~ ssspure:] docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS               NAMES
+2b723a9993b3        nginx               "nginx -g 'daemon of…"   7 seconds ago       Up 5 seconds        80/tcp              web
+
+~~~
+
+
+
 #### 六.docker ps
 
 docker ps命令用于显示运行的容器的信息。
@@ -141,6 +162,12 @@ docker ps命令用于显示运行的容器的信息。
 - -l选项：用于显示上一个运行的容器。
 - -n Num选项：用于显示指定数量的之前运行的容器。
 - -q 静默模式，只显示容器的ID。
+
+docker container ls也可以用来显示容器信息。
+
+docker ps和docker container ls只能用来显示正在运行的容器的信息，已经停止的容器的信息不会显示。
+
+docker ps -a可以用来显示所有容器的信息。
 
 #### 七.退出Docker的两种方式
 
@@ -152,6 +179,10 @@ docker ps命令用于显示运行的容器的信息。
 对于之前已经停止了的容器，可以使用docker start containerID来启动该容器。
 
 docker restart containerID，当容器正在运行的时候，可以市容该命令重启某个容器。
+
+在重启容器的时候，使用-a(attach) 可以直接进入一个容器的shell。但是使用attach选项会有一个问题就是，如果多个终端都是使用attach进入容器的，name几个终端的命令是同步的。
+
+为了避免这个问题，可以使用docker exec -it ContainerName /bin/shell命令命进入卡其一个终端。
 
 #### 九.停止容器
 
@@ -171,3 +202,15 @@ docker rm -f强制删除容器
 
 - docker rm -f $(docker ps -aq)
 - docker ps -a -q | xargs docker rm -f
+
+####十一.显示容器log
+
+~~~bash
+ssspure:~ ssspure$ docker logs redis
+1:C 16 Dec 2018 02:56:55.943 # oO0OoO0OoO0Oo Redis is starting oO0OoO0OoO0Oo
+1:C 16 Dec 2018 02:56:55.943 # Redis version=5.0.3, bits=64, commit=00000000, modified=0, pid=1, just started
+1:C 16 Dec 2018 02:56:55.943 # Warning: no config file specified, using the default config. In order to specify a config file use redis-server /path/to/redis.conf
+~~~
+
+
+

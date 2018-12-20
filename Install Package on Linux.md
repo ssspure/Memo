@@ -54,7 +54,7 @@ chkconfig docker on
 
 
 
-#### 3VIntualBox中的的CentOS安装共享文件夹
+#### 3VIntualBox中的CentOS安装共享文件夹
 
 The VirtualBox documentation[1] for how to install guest additions 
 
